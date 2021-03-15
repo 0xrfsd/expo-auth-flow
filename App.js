@@ -42,9 +42,26 @@ const Stack = createStackNavigator();
 
 import { LoginContext } from './src/utils/Context';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function App() {
 
-    const [isAuthenticated, setIsAuthenticated] = React.useState(false)
+    const [isAuthenticated, setIsAuthenticated] = React.useState(null)
+
+    const getToken = async () => {
+        try {
+          const value = await AsyncStorage.getItem('@token')
+          if(value !== null) {
+              setIsAuthenticated(true);
+          } 
+        } catch(e) {
+          // error reading value
+        }
+      }
+      
+      React.useEffect(() => {
+        getToken();
+      }, [])
 
     return (
         <NavigationContainer>
